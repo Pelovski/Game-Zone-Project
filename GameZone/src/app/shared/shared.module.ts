@@ -6,8 +6,6 @@ import { TabComponent } from './tab/tab.component';
 import { InputComponent } from './input/input.component';
 import { ReactiveFormsModule } from '@angular/forms';
 
-
-
 @NgModule({
   declarations: [
     ModalComponent,
@@ -17,7 +15,7 @@ import { ReactiveFormsModule } from '@angular/forms';
   ],
   imports: [
     CommonModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
   ],
   exports: [
     ModalComponent,
