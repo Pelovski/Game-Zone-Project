@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import IUser from 'src/app/models/user.modal';
+import { RegisterValidators } from '../validators/register-validators';
+import { EmailTaken } from '../validators/email-taken';
 
 
 @Component({
@@ -11,7 +13,7 @@ import IUser from 'src/app/models/user.modal';
 })
 export class RegisterComponent {
 
-    constructor(private auth: AuthService){
+    constructor(private auth: AuthService, private emailTaken: EmailTaken){
       
     }
 
@@ -30,7 +32,7 @@ export class RegisterComponent {
     email: new FormControl('', [
       Validators.required,
       Validators.email
-    ]),
+    ],this.emailTaken.validate),
     age: new FormControl<number | null>(null, [
       Validators.min(15),
       Validators.max(120)
@@ -41,8 +43,8 @@ export class RegisterComponent {
     ]),
     confirm_password: new FormControl('', [
       Validators.required
-    ]),
-  });
+    ])
+  }, RegisterValidators.match('password', 'confirm_password')); // --> Angular will automaticlly invoke this func with the formGorup 
 
   async register() {
 
