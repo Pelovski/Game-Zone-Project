@@ -16,11 +16,11 @@ export class ModalComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit(): void {
-    document.body.appendChild(this.el.nativeElement)
+    document.body.appendChild(this.el.nativeElement);
   }
 
   ngOnDestroy(): void {
-    document.body.removeChild(this.el.nativeElement)
+    document.body.removeChild(this.el.nativeElement);
   }
   
   closeModal(){
