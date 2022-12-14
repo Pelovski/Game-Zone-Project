@@ -1,6 +1,6 @@
   <!-- Header -->
   <header id="header" class="bg-secondary">
-    <nav class="container mx-auto flex justify-start items-center py-8 px-4">
+    <nav class="container mx-auto flex justify-start items-center py-8 px-4 ">
       <!-- App Name -->
       <a class="text-3xl text-indigo-400 font-bold uppercase mr-4" routerLink="/">Game Zone</a>
 
@@ -16,16 +16,16 @@
             <a  class="px-3 text-lg" routerLink="/manage" routerLinkActive="text-indigo-400" [routerLinkActiveOptions]="{ exact: true }">Manage</a>
           </li>
           <li routerLinkActive="text-indigo-400">
-            <a class="px-3 text-lg" href="#">Upload</a>
+            <a class="px-3 text-lg" routerLink="/upload" routerLinkActive="text-indigo-400" [routerLinkActiveOptions]="{ exact: true }">Upload</a>
+          </li>
+          
+          <li>
+            <a class="px-3 text-lg"  href="#" (click)="auth.logout($event)">Logout</a>
           </li>
         </ng-template>
         
           <li routerLinkActive="text-indigo-400">
             <a class="px-3 text-lg" routerLink="/about">About</a>
-          </li>
-
-          <li>
-            <a class="px-3 text-lg" routerLink="/" (click)="logout($event)">Logout</a>
           </li>
         </ul>
       </div>
