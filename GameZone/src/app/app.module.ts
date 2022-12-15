@@ -14,6 +14,7 @@ import { AboutComponent } from './about/about.component';
 import { VideoModule } from './video/video.module';
 import { GameVideosComponent } from './game-videos/game-videos.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { NotFoundComponent } from './not-found/not-found.component';
     AngularFireAuthModule,
     AngularFirestoreModule,
     VideoModule,
-    AppRoutingModule
+    AppRoutingModule,
+    AngularFireStorageModule // Helps for uploading files in Firebase
   ],
   providers: [],
   bootstrap: [AppComponent]
