@@ -4,6 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
 import { UploadComponent } from './video/upload/upload.component';
 import { GameVideosComponent } from './game-videos/game-videos.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 
 //Contain a list of objects with configuration settings for each route
 const routes: Routes = [{
@@ -24,7 +25,12 @@ const routes: Routes = [{
 {
   path:'video/:id',
   component: GameVideosComponent,
-}];
+},
+{
+  path:'**',
+  component: NotFoundComponent,
+}
+];
 
 @NgModule({
   // Registring the routes
