@@ -4,6 +4,7 @@ import IVideo from '../models/video.model';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { switchMap, map } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ import { of } from 'rxjs';
 export class VideoService {
   public videoCollection: AngularFirestoreCollection<IVideo>
 
-  constructor(private db: AngularFirestore, private auth: AngularFireAuth) { 
+  constructor(private db: AngularFirestore, private auth: AngularFireAuth, private storage: AngularFireStorage) { 
     this.videoCollection = db.collection('videos');
   }
 
@@ -34,5 +35,19 @@ export class VideoService {
       }),
       map(snapshot => (snapshot as QuerySnapshot<IVideo>).docs)
     );
+  }
+
+  updateVideo(id: string, title: string){
+    return this.videoCollection.doc(id).update({
+      title
+    });
+  }
+
+  async deleteVideo(video: IVideo){
+    const videoRef = this.storage.ref(`videos/${video.fileName}`);
+
+    await videoRef.delete();
+
+    await this.videoCollection.doc(video.docID).delete();
   }
 }
