@@ -6,7 +6,7 @@ import { last, switchMap } from 'rxjs/operators';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import { VideoService } from 'src/app/services/video.service';
-import { ThisReceiver } from '@angular/compiler';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-upload',
@@ -46,13 +46,15 @@ title: this.title
   constructor(
     private storage: AngularFireStorage ,
     private auth: AngularFireAuth,
-    private videosService: VideoService 
+    private videosService: VideoService,
+    private router: Router
     ){
 
     auth.user.subscribe(user => this.user = user);
    }
 
   ngOnDestroy(): void {
+    this.task?.cancel();
   }
 
   storeFile($event: Event){
@@ -81,6 +83,7 @@ title: this.title
     this.inSubmission = true;
     this.showPercentage = true;
 
+
     const videoFileName = uuid();
     const videoPath = `videos/${videoFileName}.mp4`;
 
@@ -95,7 +98,7 @@ title: this.title
       last(),
       switchMap(() => videoref.getDownloadURL())
     ).subscribe({
-      next: (url) =>{
+      next: async (url) =>{
         const video = {
 
           uid: this.user?.uid as string,
@@ -105,12 +108,19 @@ title: this.title
           url
         };
 
-        this.videosService.createVideo(video);
+        const videoDocRef = await this.videosService.createVideo(video);
         
 
         this.alertColor = 'green';
         this.alertMsg = 'Success! Your video is now ready to share with the world.';
         this.showPercentage = false;
+
+        setTimeout(() => {
+          this.router.navigate([
+            'video', videoDocRef.id
+          ])
+        }, 1000);
+
       },
       error: (error) => {
         this.uploadForm.enable();
@@ -122,5 +132,4 @@ title: this.title
       }
     });
   }
-
 }
