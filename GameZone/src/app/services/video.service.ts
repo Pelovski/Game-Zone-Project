@@ -10,16 +10,16 @@ import { AngularFireStorage } from '@angular/fire/compat/storage';
   providedIn: 'root'
 })
 export class VideoService {
-  public videoCollection: AngularFirestoreCollection<IVideo>
+  public videosCollection: AngularFirestoreCollection<IVideo>
   pageVideos: IVideo[] = [];
-  pendingreq = false;
+  pendingReq = false;
 
   constructor(private db: AngularFirestore, private auth: AngularFireAuth, private storage: AngularFireStorage) {
-    this.videoCollection = db.collection('videos');
+    this.videosCollection = db.collection('videos');
   }
 
   createVideo(data: IVideo): Promise<DocumentReference<IVideo>> {
-    return this.videoCollection.add(data);
+    return this.videosCollection.add(data);
   }
 
   getUserVideos() {
@@ -29,7 +29,7 @@ export class VideoService {
           return of([])
         }
 
-        const query = this.videoCollection.ref.where(
+        const query = this.videosCollection.ref.where(
           'uid', '==', user.uid
         );
 
@@ -40,33 +40,39 @@ export class VideoService {
   }
 
   updateVideo(id: string, title: string) {
-    return this.videoCollection.doc(id).update({
+    return this.videosCollection.doc(id).update({
       title
     });
   }
 
   async deleteVideo(video: IVideo) {
     const videoRef = this.storage.ref(`videos/${video.fileName}`);
+    const screenshotRef = this.storage.ref(
+      `screenshots/${video.screenshotFileName}`
+    );
 
     await videoRef.delete();
+    await screenshotRef.delete();
 
-    await this.videoCollection.doc(video.docID).delete();
+    await this.videosCollection.doc(video.docID).delete();
   }
 
   async getVideos() {
 
-    if (this.pendingreq) {
+    if (this.pendingReq) {
       return
     }
 
-    this.pendingreq = true;
-    let query = this.videoCollection.ref.limit(6);
+    this.pendingReq = true;
+    //Take the newes video
+    let query = this.videosCollection.ref.orderBy('timestamp', 'desc').limit(6);
+
     const { length } = this.pageVideos;
 
 
     if (length) {
       const lastDocID = this.pageVideos[length - 1].docID;
-      const lastDoc = this.videoCollection.doc(lastDocID).get();
+      const lastDoc = await this.videosCollection.doc(lastDocID).get();
 
       query = query.startAfter(lastDoc);
     }
@@ -80,6 +86,6 @@ export class VideoService {
       })
     });
 
-    this.pendingreq = false;
+    this.pendingReq = false;
   }
 }

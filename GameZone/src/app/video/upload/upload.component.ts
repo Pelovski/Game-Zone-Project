@@ -2,12 +2,13 @@ import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/compat/storage';
 import { v4 as uuid } from 'uuid';
-import { last, switchMap } from 'rxjs/operators';
+import { switchMap } from 'rxjs/operators';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import { VideoService } from 'src/app/services/video.service';
 import { Router } from '@angular/router';
 import { FfmpegService } from 'src/app/services/ffmpeg.service';
+import { combineLatest, forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-upload',
@@ -33,6 +34,7 @@ export class UploadComponent implements OnDestroy {
 
   screenshots: string[] = [];
   selectedScreenshot = '';
+  screenshotTask?: AngularFireUploadTask;
 
   title = new FormControl('', {
     validators: [
@@ -91,8 +93,9 @@ export class UploadComponent implements OnDestroy {
     this.nextStep = true;
   }
 
-  uploadFile() {
+  async uploadFile() {
     this.uploadForm.disable();
+
     this.showAlert = true;
     this.alertColor = 'blue';
     this.alertMsg = 'Please wait! Your video is being uploaded.';
@@ -103,25 +106,60 @@ export class UploadComponent implements OnDestroy {
     const videoFileName = uuid();
     const videoPath = `videos/${videoFileName}.mp4`;
 
+
+    const screenshotBlob = await this.ffmpegService.blobFromURL(
+      this.selectedScreenshot
+    ); 
+
+    const screenshotPath = `screenshots/${videoFileName}.png`;
+
     this.task = this.storage.upload(videoPath, this.file);
     const videoref = this.storage.ref(videoPath);
 
-    this.task.percentageChanges().subscribe(progress => {
-      this.percentage = progress as number / 100
+    this.screenshotTask = this.storage.upload(screenshotPath, screenshotBlob);
+
+    const screenshotRef = this.storage.ref(screenshotPath);
+
+    combineLatest([
+      this.task.percentageChanges(),
+      this.screenshotTask.percentageChanges()
+    ]).subscribe((progress) => {
+      const[videoProgress, screenshotProgress] = progress
+
+      if(!videoProgress || !screenshotProgress){
+        return
+      }
+
+      const total = videoProgress + screenshotProgress;
+
+      this.percentage = total as number / 200;
     });
 
-    this.task.snapshotChanges().pipe(
-      last(),
-      switchMap(() => videoref.getDownloadURL())
+    // Push values while the upload is in progress
+    // Waiting for Firebase to give us the URLs to both files, after we've recived them we will push them onto the subscriber
+
+    forkJoin([
+      this.task.snapshotChanges(),
+      this.screenshotTask.snapshotChanges()   
+    ]).pipe(
+      switchMap(() => forkJoin([
+        videoref.getDownloadURL(),
+        screenshotRef.getDownloadURL()
+      ]))
     ).subscribe({
-      next: async (url) => {
+      next: async (urls) => {
+        const[videoUrl, screenshotURL] = urls;
+
         const video = {
 
           uid: this.user?.uid as string,
           displayName: this.user?.displayName as string,
           title: this.title.value,
           fileName: `${videoFileName}.mp4`,
-          url
+          url: videoUrl,
+          screenshotURL,
+          screenshotFileName: `${videoFileName}.png`,
+          timestamp: firebase.firestore.FieldValue.serverTimestamp()
         };
 
         const videoDocRef = await this.videosService.createVideo(video);
