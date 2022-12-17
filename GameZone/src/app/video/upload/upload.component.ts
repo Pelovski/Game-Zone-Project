@@ -1,12 +1,13 @@
 import { Component, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/compat/storage';
-import { v4 as uuid} from 'uuid';
+import { v4 as uuid } from 'uuid';
 import { last, switchMap } from 'rxjs/operators';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import firebase from 'firebase/compat/app';
 import { VideoService } from 'src/app/services/video.service';
 import { Router } from '@angular/router';
+import { FfmpegService } from 'src/app/services/ffmpeg.service';
 
 @Component({
   selector: 'app-upload',
@@ -30,43 +31,58 @@ export class UploadComponent implements OnDestroy {
 
   task?: AngularFireUploadTask;
 
-  title =  new FormControl('',{
-  validators:[
-    Validators.required,
-    Validators.minLength(3)
-  ],
-  nonNullable: true
-});
+  screenshots: string[] = [];
+  selectedScreenshot = '';
+
+  title = new FormControl('', {
+    validators: [
+      Validators.required,
+      Validators.minLength(3)
+    ],
+    nonNullable: true
+  });
 
 
-uploadForm = new FormGroup({
-title: this.title
-});
+  uploadForm = new FormGroup({
+    title: this.title
+  });
 
   constructor(
-    private storage: AngularFireStorage ,
+    private storage: AngularFireStorage,
     private auth: AngularFireAuth,
     private videosService: VideoService,
-    private router: Router
-    ){
-
+    private router: Router,
+    public ffmpegService: FfmpegService
+  ) {
     auth.user.subscribe(user => this.user = user);
-   }
+    this.ffmpegService.init();
+  }
 
   ngOnDestroy(): void {
     this.task?.cancel();
   }
 
-  storeFile($event: Event){
+  async storeFile($event: Event) {
+    if(this.ffmpegService.isRunnung){
+      return
+    }
+
     this.isDragover = false;
 
-    this.file = ($event as DragEvent).dataTransfer?
-    ($event as DragEvent).dataTransfer?.files.item(0) ?? null :
-    ($event.target as HTMLInputElement).files?.item(0) ?? null;
+    this.file = ($event as DragEvent).dataTransfer ?
+      ($event as DragEvent).dataTransfer?.files.item(0) ?? null :
+      ($event.target as HTMLInputElement).files?.item(0) ?? null;
 
-    if(!this.file || this.file.type !== 'video/mp4'){
+    if (!this.file || this.file.type !== 'video/mp4') {
       return;
     }
+
+    this.screenshots = await this.ffmpegService.getScreenshots(this.file);
+
+    this.selectedScreenshot = this.screenshots[0];
+
+    console.log(this.screenshots);
+    
 
     this.title.setValue(
       this.file.name.replace(/\.[^/.]+$/, '')
@@ -75,7 +91,7 @@ title: this.title
     this.nextStep = true;
   }
 
-  uploadFile(){
+  uploadFile() {
     this.uploadForm.disable();
     this.showAlert = true;
     this.alertColor = 'blue';
@@ -87,10 +103,10 @@ title: this.title
     const videoFileName = uuid();
     const videoPath = `videos/${videoFileName}.mp4`;
 
-     this.task = this.storage.upload(videoPath, this.file);
+    this.task = this.storage.upload(videoPath, this.file);
     const videoref = this.storage.ref(videoPath);
 
-    this.task.percentageChanges().subscribe(progress =>{
+    this.task.percentageChanges().subscribe(progress => {
       this.percentage = progress as number / 100
     });
 
@@ -98,7 +114,7 @@ title: this.title
       last(),
       switchMap(() => videoref.getDownloadURL())
     ).subscribe({
-      next: async (url) =>{
+      next: async (url) => {
         const video = {
 
           uid: this.user?.uid as string,
@@ -109,7 +125,7 @@ title: this.title
         };
 
         const videoDocRef = await this.videosService.createVideo(video);
-        
+
 
         this.alertColor = 'green';
         this.alertMsg = 'Success! Your video is now ready to share with the world.';
