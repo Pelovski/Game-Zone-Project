@@ -15,6 +15,7 @@ import { VideoModule } from './video/video.module';
 import { GameVideosComponent } from './game-videos/game-videos.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
+import { VideosListComponent } from './videos-list/videos-list.component';
 
 
 @NgModule({
@@ -24,7 +25,8 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
     HomeComponent,
     AboutComponent,
     GameVideosComponent,
-    NotFoundComponent
+    NotFoundComponent,
+    VideosListComponent
   ],
   imports: [
     BrowserModule,
