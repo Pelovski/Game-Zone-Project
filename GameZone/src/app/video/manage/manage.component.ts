@@ -31,9 +31,9 @@ export class ManageComponent implements OnInit {
         this.videos.push({
           docID: doc.id,
           ...doc.data()
-        })
+        });
       })
-    });
+    })
   }
 
   sort(event: Event){

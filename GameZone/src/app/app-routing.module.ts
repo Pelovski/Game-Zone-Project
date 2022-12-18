@@ -5,6 +5,7 @@ import { AboutComponent } from './about/about.component';
 import { UploadComponent } from './video/upload/upload.component';
 import { GameVideosComponent } from './game-videos/game-videos.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { VideoService } from './services/video.service';
 
 //Contain a list of objects with configuration settings for each route
 const routes: Routes = [{
@@ -25,6 +26,9 @@ const routes: Routes = [{
 {
   path:'video/:id',
   component: GameVideosComponent,
+  resolve: {
+    video: VideoService
+  }
 },
 {
   path:'**',

@@ -1,10 +1,12 @@
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { VideoService } from '../services/video.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-videos-list',
   templateUrl: './videos-list.component.html',
-  styleUrls: ['./videos-list.component.css']
+  styleUrls: ['./videos-list.component.css'],
+  providers: [DatePipe]
 })
 export class VideosListComponent implements OnInit, OnDestroy {
   @Input() scrollable = true;
@@ -36,7 +38,6 @@ export class VideosListComponent implements OnInit, OnDestroy {
 
     if (bottomOfWindow) {
       this.videoService.getVideos();
-
     }
   }
 }

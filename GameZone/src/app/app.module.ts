@@ -16,6 +16,7 @@ import { GameVideosComponent } from './game-videos/game-videos.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { VideosListComponent } from './videos-list/videos-list.component';
+import { FbTimestampPipe } from './pipes/fb-timestamp.pipe';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { VideosListComponent } from './videos-list/videos-list.component';
     AboutComponent,
     GameVideosComponent,
     NotFoundComponent,
-    VideosListComponent
+    VideosListComponent,
+    FbTimestampPipe
   ],
   imports: [
     BrowserModule,

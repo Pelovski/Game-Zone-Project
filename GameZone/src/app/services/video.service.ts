@@ -3,18 +3,19 @@ import { AngularFirestore, AngularFirestoreCollection, DocumentReference, QueryS
 import IVideo from '../models/video.model';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { switchMap, map } from 'rxjs/operators';
-import { of } from 'rxjs';
+import { of, lastValueFrom } from 'rxjs';
 import { AngularFireStorage } from '@angular/fire/compat/storage';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot, Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
-export class VideoService {
+export class VideoService implements Resolve<IVideo | null>{
   public videosCollection: AngularFirestoreCollection<IVideo>
   pageVideos: IVideo[] = [];
   pendingReq = false;
 
-  constructor(private db: AngularFirestore, private auth: AngularFireAuth, private storage: AngularFireStorage) {
+  constructor(private db: AngularFirestore, private auth: AngularFireAuth, private storage: AngularFireStorage, private router: Router) {
     this.videosCollection = db.collection('videos');
   }
 
@@ -65,14 +66,15 @@ export class VideoService {
 
     this.pendingReq = true;
     //Take the newes video
-    let query = this.videosCollection.ref.orderBy('timestamp', 'desc').limit(6);
+    let query = this.videosCollection.ref.orderBy('timestamp', 'desc').limit(3);
 
     const { length } = this.pageVideos;
 
 
     if (length) {
       const lastDocID = this.pageVideos[length - 1].docID;
-      const lastDoc = await this.videosCollection.doc(lastDocID).get();
+      const docs = this.videosCollection.doc(lastDocID).get();
+      const lastDoc = await lastValueFrom(docs);
 
       query = query.startAfter(lastDoc);
     }
@@ -87,5 +89,20 @@ export class VideoService {
     });
 
     this.pendingReq = false;
+  }
+
+  //route - Sotres information on the current route being visited
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
+    return this.videosCollection.doc(route.params['id']).get().pipe(
+      map(snapshot =>{
+        const data = snapshot.data();
+
+        if(!data){
+          this.router.navigate(['/']);
+          return null;
+        }
+        return data;
+      })
+    );
   }
 }
