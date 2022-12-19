@@ -2,6 +2,21 @@
 @import '~video.js/dist/video-js.css';
 @import '~@videojs/themes/dist/forest/index.css';
 
+.like-button, .dislike-button {
+  font-size: 1rem;
+  padding: 5px 10px;
+  color:   #585858;
+}
+
+.liked, .disliked {   
+  font-weight: bold;
+  color: #1565c0;
+}
+
+.game{
+  zoom: 70%;
+}
+
 .vjs-theme-forest {
     --vjs-theme-forest--primary: rgb(129,140,248);
   }

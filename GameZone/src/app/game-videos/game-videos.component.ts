@@ -27,8 +27,6 @@ export class GameVideosComponent implements OnInit {
         src: this.video.url,
         type: 'video/mp4'
       })
-      
     });
-    
   }
 }

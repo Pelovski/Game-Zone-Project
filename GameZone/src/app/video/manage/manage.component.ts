@@ -65,14 +65,29 @@ export class ManageComponent implements OnInit {
 
   deleteClip($event:Event, video: IVideo){
     $event.preventDefault();
-    
-    this.videoService.deleteVideo(video);
 
-    this.videos.forEach((element, index) => {
-      if(element.docID == video.docID){
-        this.videos.splice(index, 1);
-      }
-    })
+    if(confirm(`Are you sure you want to delete ${video.title}?`)){
+      this.videoService.deleteVideo(video);
+
+      this.videos.forEach((element, index) => {
+        if(element.docID == video.docID){
+          this.videos.splice(index, 1);
+        }
+      })
+    }
+  }
+
+  async copyToVideoboard($event: MouseEvent, docID: string | undefined){
+    $event.preventDefault();
+
+    if(!docID){
+      return
+    }
+    const url = `${location.origin}/video/${docID}`;
+
+    await navigator.clipboard.writeText(url)
+
+    alert('Link Copied!')
   }
   
 }
