@@ -1,6 +1,6 @@
 import firebase from 'firebase/compat/app';
 
-export default interface IVideo{
+export default interface IVideo {
     docID?: string;
     uid: string;
     displayName: string;

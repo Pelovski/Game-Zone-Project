@@ -65,7 +65,7 @@ export class UploadComponent implements OnDestroy {
   }
 
   async storeFile($event: Event) {
-    if(this.ffmpegService.isRunnung){
+    if (this.ffmpegService.isRunnung) {
       return
     }
 
@@ -84,7 +84,7 @@ export class UploadComponent implements OnDestroy {
     this.selectedScreenshot = this.screenshots[0];
 
     console.log(this.screenshots);
-    
+
 
     this.title.setValue(
       this.file.name.replace(/\.[^/.]+$/, '')
@@ -109,7 +109,7 @@ export class UploadComponent implements OnDestroy {
 
     const screenshotBlob = await this.ffmpegService.blobFromURL(
       this.selectedScreenshot
-    ); 
+    );
 
     const screenshotPath = `screenshots/${videoFileName}.png`;
 
@@ -124,9 +124,9 @@ export class UploadComponent implements OnDestroy {
       this.task.percentageChanges(),
       this.screenshotTask.percentageChanges()
     ]).subscribe((progress) => {
-      const[videoProgress, screenshotProgress] = progress
+      const [videoProgress, screenshotProgress] = progress
 
-      if(!videoProgress || !screenshotProgress){
+      if (!videoProgress || !screenshotProgress) {
         return
       }
 
@@ -140,7 +140,7 @@ export class UploadComponent implements OnDestroy {
 
     forkJoin([
       this.task.snapshotChanges(),
-      this.screenshotTask.snapshotChanges()   
+      this.screenshotTask.snapshotChanges()
     ]).pipe(
       switchMap(() => forkJoin([
         videoref.getDownloadURL(),
@@ -148,7 +148,7 @@ export class UploadComponent implements OnDestroy {
       ]))
     ).subscribe({
       next: async (urls) => {
-        const[videoUrl, screenshotURL] = urls;
+        const [videoUrl, screenshotURL] = urls;
 
         const video = {
 

@@ -15,16 +15,16 @@ export class ManageComponent implements OnInit {
   videos: IVideo[] = [];
   activeVideo: IVideo | null = null;
 
-  constructor(private router: Router, private route: ActivatedRoute, private videoService: VideoService, private modal: ModalService ) {
+  constructor(private router: Router, private route: ActivatedRoute, private videoService: VideoService, private modal: ModalService) {
 
-   }
+  }
 
   ngOnInit(): void {
     this.route.queryParamMap.subscribe((params: Params) => {
       this.videoOrder = params['sort'] === '2' ? params['sort'] : '1';
     });
 
-    this.videoService.getUserVideos().subscribe(docs =>{
+    this.videoService.getUserVideos().subscribe(docs => {
       this.videos = [];
 
       docs.forEach(doc => {
@@ -36,10 +36,10 @@ export class ManageComponent implements OnInit {
     })
   }
 
-  sort(event: Event){
-    const { value } =  (event.target as HTMLSelectElement);
+  sort(event: Event) {
+    const { value } = (event.target as HTMLSelectElement);
 
-    this.router.navigate([],{
+    this.router.navigate([], {
       relativeTo: this.route,
       queryParams: {
         sort: value
@@ -47,7 +47,7 @@ export class ManageComponent implements OnInit {
     });
   }
 
-  openModal($event: Event, video:IVideo){
+  openModal($event: Event, video: IVideo) {
     $event.preventDefault();
 
     this.activeVideo = video;
@@ -55,32 +55,32 @@ export class ManageComponent implements OnInit {
     this.modal.toggleModle('editVideo');
   }
 
-  update($event: IVideo){
+  update($event: IVideo) {
     this.videos.forEach((element, index) => {
-      if(element.docID == $event.docID){
+      if (element.docID == $event.docID) {
         this.videos[index].title = $event.title;
       }
     });
   }
 
-  deleteClip($event:Event, video: IVideo){
+  deleteClip($event: Event, video: IVideo) {
     $event.preventDefault();
 
-    if(confirm(`Are you sure you want to delete ${video.title}?`)){
+    if (confirm(`Are you sure you want to delete ${video.title}?`)) {
       this.videoService.deleteVideo(video);
 
       this.videos.forEach((element, index) => {
-        if(element.docID == video.docID){
+        if (element.docID == video.docID) {
           this.videos.splice(index, 1);
         }
       })
     }
   }
 
-  async copyToVideoboard($event: MouseEvent, docID: string | undefined){
+  async copyToVideoboard($event: MouseEvent, docID: string | undefined) {
     $event.preventDefault();
 
-    if(!docID){
+    if (!docID) {
       return
     }
     const url = `${location.origin}/video/${docID}`;
@@ -89,5 +89,5 @@ export class ManageComponent implements OnInit {
 
     alert('Link Copied!')
   }
-  
+
 }

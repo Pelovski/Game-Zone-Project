@@ -26,7 +26,7 @@ export class VideosListComponent implements OnInit, OnDestroy {
     if (this.scrollable) {
       window.removeEventListener('scroll', this.handleScroll);
     }
-    
+
     this.videoService.pageVideos = [];
   }
 

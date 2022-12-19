@@ -9,7 +9,7 @@ export class AlertComponent implements OnInit {
 
   @Input() color = 'blue';
 
-  get bgColor(){
+  get bgColor() {
     return `bg-${this.color}-400`;
   }
 

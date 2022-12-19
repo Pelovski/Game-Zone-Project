@@ -9,29 +9,40 @@ import { VideoService } from './services/video.service';
 
 //Contain a list of objects with configuration settings for each route
 const routes: Routes = [{
-  path:'',
+  path: '',
   component: HomeComponent
 },
 {
-  path:'about',
+  path: 'about',
   component: AboutComponent
 },
 {
-  path:'upload',
+  path: 'upload',
   component: UploadComponent,
-  data:{
+  data: {
     authOnly: true
   }
 },
 {
-  path:'video/:id',
+  path: 'video/:id',
   component: GameVideosComponent,
   resolve: {
     video: VideoService
   }
 },
 {
-  path:'**',
+  //lazy loading
+  path: '',
+  loadChildren: async () => (await import('./video/video.module')).VideoModule,
+
+},
+{
+  path: '',
+  loadChildren: async () => (await import('./video/video.module')).VideoModule,
+
+},
+{
+  path: '**',
   component: NotFoundComponent,
 }
 ];

@@ -57,7 +57,7 @@ export class EditComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async submit() {
-    if(!this.activeVideo){
+    if (!this.activeVideo) {
       return;
     }
     this.inSubmission = true;

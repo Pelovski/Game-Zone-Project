@@ -13,9 +13,9 @@ import { EmailTaken } from '../validators/email-taken';
 })
 export class RegisterComponent {
 
-    constructor(private auth: AuthService, private emailTaken: EmailTaken){
-      
-    }
+  constructor(private auth: AuthService, private emailTaken: EmailTaken) {
+
+  }
 
   inSubmission = false;
   showAlert = false;
@@ -32,7 +32,7 @@ export class RegisterComponent {
     email: new FormControl('', [
       Validators.required,
       Validators.email
-    ],this.emailTaken.validate),
+    ], this.emailTaken.validate),
     age: new FormControl<number | null>(null, [
       Validators.min(15),
       Validators.max(120)
@@ -53,7 +53,7 @@ export class RegisterComponent {
     this.alertColor = 'blue';
     this.inSubmission = true;
 
-  
+
 
     try {
       await this.auth.createUser(this.registerForm.value as IUser)
@@ -66,7 +66,7 @@ export class RegisterComponent {
       return;
     }
 
-    this.alertMessage =  'Success! Your account has been created.'
+    this.alertMessage = 'Success! Your account has been created.'
     this.alertColor = 'green';
   }
 }

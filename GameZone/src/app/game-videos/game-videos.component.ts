@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewEncapsulation,ViewChild } from '@angular/core';
+import { Component, OnInit, ElementRef, ViewEncapsulation, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import IVideo from '../models/video.model';
 import videojs from 'video.js';
@@ -12,15 +12,15 @@ import { DatePipe } from '@angular/common';
   providers: [DatePipe]
 })
 export class GameVideosComponent implements OnInit {
-  @ViewChild('videoPlayer', {static: true}) target?: ElementRef;
+  @ViewChild('videoPlayer', { static: true }) target?: ElementRef;
   player?: videojs.Player;
   video?: IVideo
 
-  constructor(public route: ActivatedRoute) {}
+  constructor(public route: ActivatedRoute) { }
   ngOnInit(): void {
     this.player = videojs(this.target?.nativeElement);
 
-    this.route.data.subscribe(data =>{
+    this.route.data.subscribe(data => {
       this.video = data['video'] as IVideo;
 
       this.player?.src({

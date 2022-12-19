@@ -1,34 +1,35 @@
-  <!-- Header -->
-  <header id="header" class="bg-secondary">
-    <nav class="container mx-auto flex justify-start items-center py-8 px-4 ">
-      <!-- App Name -->
-      <a class="text-3xl text-indigo-400 font-bold uppercase mr-4" routerLink="/">Game Zone</a>
+<!-- Header -->
+<header id="header" class="bg-secondary">
+  <nav class="container mx-auto flex justify-start items-center py-8 px-4 ">
+    <!-- App Name -->
+    <a class="text-3xl text-indigo-400 font-bold uppercase mr-4" routerLink="/">Game Zone</a>
 
-      <div class="flex flex-grow items-center">
-        <!-- Primary Navigation -->
-        <ul class="flex flex-row ml-auto">
-          <!-- Navigation Links -->
-          <li *ngIf="!(auth.isAuthenticated$ | async); else authLinks">
-            <a class="px-3 text-lg"  href="#" (click)="openModal($event)">Login / Register</a>
-          </li>
-          <ng-template #authLinks>
+    <div class="flex flex-grow items-center">
+      <!-- Primary Navigation -->
+      <ul class="flex flex-row ml-auto">
+        <!-- Navigation Links -->
+        <li *ngIf="!(auth.isAuthenticated$ | async); else authLinks">
+          <a class="px-3 text-lg" href="#" (click)="openModal($event)">Login / Register</a>
+        </li>
+        <ng-template #authLinks>
           <li>
-            <a  class="px-3 text-lg" routerLink="/manage" routerLinkActive="text-indigo-400"
-             [routerLinkActiveOptions]="{ exact: true }" [queryParams]="{ sort: '1' }" >Manage</a>
+            <a class="px-3 text-lg" routerLink="/manage" routerLinkActive="text-indigo-400"
+              [routerLinkActiveOptions]="{ exact: true }" [queryParams]="{ sort: '1' }">Manage</a>
           </li>
           <li routerLinkActive="text-indigo-400">
-            <a class="px-3 text-lg" routerLink="/upload" routerLinkActive="text-indigo-400" [routerLinkActiveOptions]="{ exact: true }">Upload</a>
+            <a class="px-3 text-lg" routerLink="/upload" routerLinkActive="text-indigo-400"
+              [routerLinkActiveOptions]="{ exact: true }">Upload</a>
           </li>
-          
+
           <li>
-            <a class="px-3 text-lg"  href="#" (click)="auth.logout($event)">Logout</a>
+            <a class="px-3 text-lg" href="#" (click)="auth.logout($event)">Logout</a>
           </li>
         </ng-template>
-        
-          <li routerLinkActive="text-indigo-400">
-            <a class="px-3 text-lg" routerLink="/about">About</a>
-          </li>
-        </ul>
-      </div>
-    </nav>
-  </header>
+
+        <li routerLinkActive="text-indigo-400">
+          <a class="px-3 text-lg" routerLink="/about">About</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+</header>

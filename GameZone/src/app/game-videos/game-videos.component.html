@@ -10,16 +10,13 @@
     <!-- Video Editor -->
     <div class="relative w-full aspect-video">
       <!-- Video Player -->
-      <video controls #videoPlayer crossorigin
-        class="video-js vjs-theme-forest mx-auto max-w-full">
+      <video controls #videoPlayer crossorigin class="video-js vjs-theme-forest mx-auto max-w-full">
       </video>
     </div>
   </div>
 </section>
-  <div class="container mx-auto my-8">
-    <h2 class="mt-6 text-2x1">More Videos</h2>
-    
-   <app-videos-list [scrollable]="false"></app-videos-list>
-  </div>
+<div class="container mx-auto my-8">
+  <h2 class="mt-6 text-2x1">More Videos</h2>
 
-  
+  <app-videos-list [scrollable]="false"></app-videos-list>
+</div>

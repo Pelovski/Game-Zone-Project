@@ -92,12 +92,12 @@ export class VideoService implements Resolve<IVideo | null>{
   }
 
   //route - Sotres information on the current route being visited
-  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot){
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
     return this.videosCollection.doc(route.params['id']).get().pipe(
-      map(snapshot =>{
+      map(snapshot => {
         const data = snapshot.data();
 
-        if(!data){
+        if (!data) {
           this.router.navigate(['/']);
           return null;
         }
