@@ -15,6 +15,10 @@
 </head>
 
 <body class="text-gray-200 font-sans pb-8">
+  <script>
+     if(!crossOriginIsolated) SharedArrayBuffer = ArrayBuffer;
+  </script>
+ 
   <app-root></app-root>
 </body>
 
