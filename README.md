@@ -36,5 +36,27 @@
  
  ## What the app looks like
  
- ![image](https://user-images.githubusercontent.com/118213841/209012054-48e2d504-c0ae-454e-86fa-3ae445f171f6.png)
+ ### Home Page
+ 
+ ![image](https://user-images.githubusercontent.com/118213841/209012361-639737af-d12f-43e8-8596-4369001a65fe.png)
+ 
+  ### Login / Register Pages
+  
+  ![image](https://user-images.githubusercontent.com/118213841/209012630-0c11d218-5992-4df8-809a-c19d77159785.png)
+  
+  ### Upload Page
+  
+  ![image](https://user-images.githubusercontent.com/118213841/209012765-c11f61c4-0025-463f-bd07-45fc526086e7.png)
+  
+   ### Manage Page
+   
+   ![image](https://user-images.githubusercontent.com/118213841/209012836-0f420dd5-0ee1-485f-9f61-4bf3e0716e75.png)
+   
+   ### Video Page
+   
+   ![image](https://user-images.githubusercontent.com/118213841/209012909-0dd793d8-5697-442b-80fe-f1c2bc893634.png)
+
+
+
+
 
