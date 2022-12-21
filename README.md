@@ -1,6 +1,8 @@
 # GameZone
 
  - GameZone is an application for gaming videos. Users are able to watch, upload and edit videos.
+ 
+ - The application is deployed and can be visit here: https://game-zone-eight.vercel.app/
 
 ## User Stories
 
