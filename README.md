@@ -35,3 +35,6 @@
  - RxJS
  
  ## What the app looks like
+ 
+ ![image](https://user-images.githubusercontent.com/118213841/209012054-48e2d504-c0ae-454e-86fa-3ae445f171f6.png)
+
