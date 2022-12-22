@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
         this.credentials.email, this.credentials.password
       )
     } catch (e) {
-      this.alertMessage = 'An unexpected error occurred. Please try again later.';
+      this.alertMessage = 'The email address or password is incorrect.';
       this.alertColor = 'red';
       this.inSubmission = false;
       return;

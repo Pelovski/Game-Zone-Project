@@ -1,11 +1,11 @@
-import { Component, NgModule } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AboutComponent } from './about/about.component';
-import { UploadComponent } from './video/upload/upload.component';
 import { GameVideosComponent } from './game-videos/game-videos.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { VideoService } from './services/video.service';
+
 
 //Contain a list of objects with configuration settings for each route
 const routes: Routes = [{
@@ -15,13 +15,6 @@ const routes: Routes = [{
 {
   path: 'about',
   component: AboutComponent
-},
-{
-  path: 'upload',
-  component: UploadComponent,
-  data: {
-    authOnly: true
-  }
 },
 {
   path: 'video/:id',
